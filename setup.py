@@ -40,7 +40,8 @@ setup(name='mbed-tools',
       url='https://github.com/mbedmicro/mbed',
       packages=find_packages(),
       license=LICENSE,
-      install_requires=["PrettyTable>=0.7.2", "PySerial>=2.7", "IntelHex>=1.3", "colorama>=0.3.3", "Jinja2>=2.7.3"])
+      dependency_links=["git+https://114f0702ceeee3182f9601ad014c22c42c24ae1c:x-oauth-basic@github.com/ARMmbed/mbed-ls.git#egg=mbed-ls-0.1.12"],
+      install_requires=["PrettyTable>=0.7.2", "PySerial>=2.7", "IntelHex>=1.3", "colorama>=0.3.3", "Jinja2>=2.7.3", "junit-xml>=1.3", "mbed-ls>=0.1.12"])
 
 # Restore previous private_settings if needed
 if backup:
