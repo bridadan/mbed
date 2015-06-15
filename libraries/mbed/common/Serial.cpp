@@ -28,7 +28,7 @@ int Serial::_getc() {
 }
 
 int Serial::_putc(int c) {
-    return _base_putc(c);
+    return _base_putc(d);
 }
 
 } // namespace mbed
