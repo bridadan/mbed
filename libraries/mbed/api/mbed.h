@@ -16,7 +16,7 @@
 #ifndef MBED_H
 #define MBED_H
 
-#error THis_BREAKS_YOUR_BUILD
+//#error THis_BREAKS_YOUR_BUILD
 
 #define MBED_LIBRARY_VERSION 101
 
