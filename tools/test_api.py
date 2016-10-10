@@ -36,7 +36,9 @@ from copy import copy
 from time import sleep, time
 from Queue import Queue, Empty
 from os.path import join, exists, basename, relpath
-from threading import Thread, Lock
+from threading import Thread, Lock, Event
+from Queue import Queue
+from multiprocessing import cpu_count
 from subprocess import Popen, PIPE
 
 # Imports related to mbed build api
@@ -2068,6 +2070,46 @@ def norm_relative_path(path, start):
     path = path.replace("\\", "/")
     return path
 
+
+def build_test_worker(test_queue, test_build, execution_directory, exit_event):
+    while not exit_event.is_set():
+        try:
+            args, kwargs = test_queue.get(False)
+            bin_file = None
+            
+            kwargs['silent'] = True
+            
+            try:
+                bin_file = build_project(*args, **kwargs)
+                
+                if bin_file:
+                    bin_file = norm_relative_path(bin_file, execution_directory)
+
+                    test_build['tests'][kwargs['project_id']] = {
+                        "binaries": [
+                            {
+                                "path": bin_file
+                            }
+                        ]
+                    }
+                
+                test_queue.task_done()
+
+            except NotSupportedException:
+                print ''
+                test_queue.task_done()
+                pass
+            except ToolException:
+                test_queue.task_done()
+                pass
+            except Exception:
+                test_queue.task_done()
+                raise
+        
+        except Empty:
+            break
+    
+    
 def build_tests(tests, base_source_paths, build_path, target, toolchain_name,
                 clean=False, notify=None, verbose=False, jobs=1, macros=None,
                 silent=False, report=None, properties=None,
@@ -2084,6 +2126,16 @@ def build_tests(tests, base_source_paths, build_path, target, toolchain_name,
 
     target_name = target if isinstance(target, str) else target.name
     
+    if report != None:
+        if not target_name in report:
+            report[target_name] = {}
+
+        if not toolchain_name in report[target_name]:
+            report[target_name][toolchain_name] = {}
+    
+    if properties != None:
+            prep_properties(properties, target_name, toolchain_name, '')
+    
     test_build = {
         "platform": target_name,
         "toolchain": toolchain_name,
@@ -2093,62 +2145,57 @@ def build_tests(tests, base_source_paths, build_path, target, toolchain_name,
         "tests": {}
     }
 
-    result = True
-
-    map_outputs_total = list()
+    result = True    
+    test_queue = Queue()
+    
     for test_name, test_path in tests.iteritems():
         test_build_path = os.path.join(build_path, test_path)
         src_path = base_source_paths + [test_path]
         bin_file = None
         test_case_folder_name = os.path.basename(test_path)
         
+        args = (src_path, test_build_path, target, toolchain_name)
+        kwargs = {
+            'jobs': jobs,
+            'clean': clean,
+            'macros': macros,
+            'name': test_case_folder_name,
+            'project_id': test_name,
+            'report': report,
+            'properties': properties,
+            'verbose': verbose,
+            'app_config': app_config,
+            'build_profile': build_profile
+        }
         
-        try:
-            bin_file = build_project(src_path, test_build_path, target, toolchain_name,
-                                     jobs=jobs,
-                                     clean=clean,
-                                     macros=macros,
-                                     name=test_case_folder_name,
-                                     project_id=test_name,
-                                     report=report,
-                                     properties=properties,
-                                     verbose=verbose,
-                                     app_config=app_config,
-                                     build_profile=build_profile)
-
-        except NotSupportedException:
-            pass
-        except ToolException:
-            result = False
-            if continue_on_build_fail:
-                continue
-            else:
-                break
-
-        # If a clean build was carried out last time, disable it for the next build.
-        # Otherwise the previously built test will be deleted.
-        if clean:
-            clean = False
-
-        # Normalize the path
-        if bin_file:
-            bin_file = norm_relative_path(bin_file, execution_directory)
-
-            test_build['tests'][test_name] = {
-                "binaries": [
-                    {
-                        "path": bin_file
-                    }
-                ]
-            }
-
-            print 'Image: %s'% bin_file
+        test_queue.put((args, kwargs))
+    
+    num_worker_threads = int(jobs if jobs else cpu_count())
+    worker_threads = []
+    exit_event = Event()
+    for i in range(num_worker_threads):
+        t = Thread(target=build_test_worker, args=(test_queue, test_build, execution_directory, exit_event))
+        t.daemon = True
+        t.start()
+        worker_threads.append(t)
+    
+    try:
+        test_queue.join()
+    except Exception:
+        print 'Got a Keyboard interrupt!'
+        exit_event.set()
+    
+    # Ensure all threads exited
+    '''for t in worker_threads:
+        t.join(timeout=5)
+        if t.is_alive():
+            print "[Warning] Test compilation thread failed to exit"'''
 
     test_builds = {}
     test_builds["%s-%s" % (target_name, toolchain_name)] = test_build
-    
 
-    return result, test_builds
+    # TODO get actual result here
+    return True, test_builds
 
 
 def test_spec_from_test_builds(test_builds):

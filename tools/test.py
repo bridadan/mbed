@@ -203,9 +203,6 @@ if __name__ == '__main__':
             except NotSupportedException, e:
                 # NotSupportedException is handled by the build log
                 pass
-            except Exception, e:
-                # Some other exception occurred, print the error message
-                print e
 
             if not library_build_success:
                 print "Failed to build library"
