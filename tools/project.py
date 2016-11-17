@@ -9,6 +9,8 @@ sys.path.insert(0, ROOT)
 from shutil import move, rmtree
 from argparse import ArgumentParser
 from os.path import normpath, realpath
+from os import walk
+import subprocess
 
 from tools.paths import EXPORT_DIR, MBED_HAL, MBED_LIBRARIES, MBED_TARGETS_PATH
 from tools.export import EXPORTERS, mcu_ide_matrix
@@ -182,6 +184,11 @@ def main():
                         action="store_true",
                         default=False)
 
+    parser.add_argument("--install-packs",
+                        dest="install_packs",
+                        action="store_true",
+                        default=False)
+
     options = parser.parse_args()
 
     # Print available tests in order and exit
@@ -214,6 +221,22 @@ def main():
         from tools.arm_pack_manager import Cache
         cache = Cache(True, True)
         cache.cache_descriptors()
+        exit(0)
+
+    if options.install_packs:
+        from tools.arm_pack_manager import Cache
+        cache = Cache(True, True)
+        cache.cache_everything()
+        result = 0
+        for root, dirs, files in walk(cache.data_path):
+            for file in files:
+                if file.endswith(".pack"):
+                        install_file = join(root,file)
+                        print "Installing %s"%file
+                        cmd = ['PackUnzip', '-i', install_file, '--no-gui']
+                        ret = subprocess.call(cmd)
+                        result = result or ret
+        exit(result)
 
     # Clean Export Directory
     if options.clean:
