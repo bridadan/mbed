@@ -13,6 +13,7 @@ import argparse
 from json import dump, load
 from zipfile import ZipFile
 from tempfile import gettempdir
+from socket import error as socket_error
 
 RootPackURL = "http://www.keil.com/pack/index.idx"
 
@@ -89,14 +90,26 @@ class Cache () :
         except OSError as exc :
             if exc.errno == EEXIST : pass
             else : raise
-        try:
-            with open(dest, "wb+") as fd :
-                remote_file = urlopen(url)
-                for x in remote_file:
-                    fd.write(x)
-                remote_file.close()
-        except URLError as e:
-            stderr.write(e.reason)
+
+        while True:
+            try:
+                with open(dest, "wb+") as fd :
+                    remote_file = urlopen(url)
+                    for x in remote_file:
+                        fd.write(x)
+                    remote_file.close()
+                    break
+
+            except URLError as e:
+                stderr.write(e.reason)
+                break
+            except socket_error as e:
+                print "Failed to download file: %s" % str(e)
+                print e
+                print type(e)
+
+            print "Retrying..."
+
         self.counter += 1
         self.display_counter("Caching Files")
 
