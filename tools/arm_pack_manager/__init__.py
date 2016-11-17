@@ -91,7 +91,10 @@ class Cache () :
             else : raise
         try:
             with open(dest, "wb+") as fd :
-                fd.write(urlopen(url).read())
+                remote_file = urlopen(url)
+                for x in remote_file:
+                    fd.write(x)
+                remote_file.close()
         except URLError as e:
             stderr.write(e.reason)
         self.counter += 1
