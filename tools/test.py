@@ -112,11 +112,25 @@ if __name__ == '__main__':
 
         options = parser.parse_args()
 
+        base_source_paths = options.source_dir
+        # Default base source path is the current directory
+        if not base_source_paths:
+            base_source_paths = ['.']
+
         # Filter tests by path if specified
         if options.paths:
-            all_paths = options.paths
+            all_paths = []
+            # Make sure path is present in source directories
+            for path in options.paths:
+                for source_path in base_source_paths:
+                    relpath = os.path.normpath(os.path.relpath(path, source_path))
+                    if not relpath.startswith('..'):
+                        all_paths.append(path)
+                        break
+                else:
+                    print "Path %s not present in source path, ignoring" % (path)
         else:
-            all_paths = ["."]
+            all_paths = base_source_paths
 
         all_tests = {}
         tests = {}
@@ -187,12 +201,6 @@ if __name__ == '__main__':
             # Build all tests
             if not options.build_dir:
                 args_error(parser, "argument --build is required")
-
-            base_source_paths = options.source_dir
-
-            # Default base source path is the current directory
-            if not base_source_paths:
-                base_source_paths = ['.']
 
             build_report = {}
             build_properties = {}
