@@ -1,0 +1,10 @@
+{
+    "name": "esp8266",
+    "type": "peripheral",
+    "properties": {
+        "pins": [
+            "u0txd",
+            "u0rxd"
+        ]
+    }
+}

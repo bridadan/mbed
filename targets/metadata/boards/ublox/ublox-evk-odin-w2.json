@@ -1,0 +1,54 @@
+{
+    "name": "ublox-evk-odin-w2",
+    "type": "board",
+    "properties": {
+        "elements": {
+            "module": {
+                "name": "odin-w26x"
+            },
+            "interface": {
+                "name": "st-link"
+            }
+        },
+        "pins": [
+            {
+                "name": "arduino",
+                "form-factor": "arduino-uno-r3"
+            },
+            {
+                "name": "microsd-card-slot",
+                "form-factor": "sd-card-slot"
+            }
+        ],
+        "netlist": [
+            ["ublox-evk-odin-w2.arduino.a0", "module.target.PF_6"],
+            ["ublox-evk-odin-w2.arduino.a1", "module.target.PA_3"],
+            ["ublox-evk-odin-w2.arduino.a2", "module.target.PC_2"],
+            ["ublox-evk-odin-w2.arduino.a3", "module.target.PF_7"],
+            ["ublox-evk-odin-w2.arduino.a4", "module.target.PG_4"],
+            ["ublox-evk-odin-w2.arduino.a5", "module.target.PE_0"],
+            ["ublox-evk-odin-w2.arduino.d0", "module.target.PD_9"],
+            ["ublox-evk-odin-w2.arduino.d1", "module.target.PD_8"],
+            ["ublox-evk-odin-w2.arduino.d2", "module.target.PA_10"],
+            ["ublox-evk-odin-w2.arduino.d3", "module.target.PA_11"],
+            ["ublox-evk-odin-w2.arduino.d4", "module.target.PA_12"],
+            ["ublox-evk-odin-w2.arduino.d5", "module.target.PB_8"],
+            ["ublox-evk-odin-w2.arduino.d6", "module.target.PD_11"],
+            ["ublox-evk-odin-w2.arduino.d7", "module.target.PD_12"],
+            ["ublox-evk-odin-w2.arduino.d8", "module.target.PA_9"],
+            ["ublox-evk-odin-w2.arduino.d9", "module.target.PE_9"],
+            ["ublox-evk-odin-w2.arduino.d10", "module.target.PE_11"],
+            ["ublox-evk-odin-w2.arduino.d11", "module.target.PE_14"],
+            ["ublox-evk-odin-w2.arduino.d12", "module.target.PE_13"],
+            ["ublox-evk-odin-w2.arduino.d13", "module.target.PE_12"],
+            ["ublox-evk-odin-w2.arduino.d14", "module.target.PF_0"],
+            ["ublox-evk-odin-w2.arduino.d15", "module.target.PF_1"],
+            ["module.target.PE_14", "ublox-evk-odin-w2.microsd-card-slot.spi-mosi"],
+            ["module.target.PE_13", "ublox-evk-odin-w2.microsd-card-slot.spi-miso"],
+            ["module.target.PE_12", "ublox-evk-odin-w2.microsd-card-slot.spi-sclk"],
+            ["module.target.PE_9", "ublox-evk-odin-w2.microsd-card-slot.spi-cs"],
+            ["interface.usbtx", "module.target.PD_8"],
+            ["interface.usbrx", "module.target.PA_9"]
+        ]
+    }
+}

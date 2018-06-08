@@ -1,0 +1,23 @@
+{
+    "name": "sd-card-spi",
+    "type": "component",
+    "properties": {
+        "elements": {
+            "sd-card": {
+                "name": "sd-card"
+            }
+        },
+        "pins": [
+            {
+                "name": "sd-card-slot",
+                "form-factor": "sd-card-slot"
+            }
+        ],
+        "netlist": [
+            ["sd-card-spi.sd-card-slot.spi-cs", "sd-card.spi-cs"],
+            ["sd-card-spi.sd-card-slot.spi-mosi", "sd-card.spi-mosi"],
+            ["sd-card-spi.sd-card-slot.spi-miso", "sd-card.spi-miso"],
+            ["sd-card-spi.sd-card-slot.spi-sclk", "sd-card.spi-sclk"]
+        ]
+    }
+}

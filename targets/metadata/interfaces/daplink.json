@@ -1,0 +1,10 @@
+{
+    "name": "daplink",
+    "type": "interface",
+    "properties": {
+        "pins": [
+            "usbtx",
+            "usbrx"
+        ]
+    }
+}

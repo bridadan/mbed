@@ -1,0 +1,11 @@
+{
+    "name": "stm32",
+    "type": "mcu",
+    "properties": {
+        "build": {
+            "extra_labels_add": ["STM"],
+            "macros_add": ["TRANSACTION_QUEUE_SIZE_SPI=2"],
+            "device_has": ["ANALOGIN", "I2C", "I2CSLAVE", "I2C_ASYNCH", "INTERRUPTIN", "PORTIN", "PORTINOUT", "PORTOUT", "PWMOUT", "RTC", "SERIAL", "SLEEP", "SPI", "SPISLAVE", "SPI_ASYNCH", "STDIO_MESSAGES"],
+        }
+    }
+}

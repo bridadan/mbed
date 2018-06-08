@@ -1,0 +1,21 @@
+{
+    "name": "grove-esp8266",
+    "type": "component",
+    "properties": {
+        "elements": {
+            "esp8266": {
+                "name": "esp8266"
+            }
+        },
+        "pins": [
+            {
+                "name": "grove",
+                "form-factor": "grove"
+            }
+        ],
+        "netlist": [
+            ["grove-esp8266.grove.pin1", "esp8266.u0txd"],
+            ["grove-esp8266.grove.pin2", "esp8266.u0rxd"]
+        ]
+    }
+}

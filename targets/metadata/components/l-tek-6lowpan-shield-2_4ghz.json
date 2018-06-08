@@ -1,0 +1,28 @@
+{
+    "name": "l-tek-6lowpan-shield-2_4ghz",
+    "type": "component",
+    "properties": {
+        "elements": {
+            "radio": {
+                "name": "at86rf2x"
+            }
+        },
+        "pins": [
+            {
+                "name": "arduino",
+                "form-factor": "arduino-uno-r3"
+            }
+        ],
+        "netlist": [
+            ["l-tek-6lowpan-shield-2_4ghz.arduino.d5", "radio.rst"],
+            ["l-tek-6lowpan-shield-2_4ghz.arduino.d7", "radio.slp-tr"],
+            ["l-tek-6lowpan-shield-2_4ghz.arduino.d9", "radio.irq"],
+            ["l-tek-6lowpan-shield-2_4ghz.arduino.d10", "radio.spi0-cs"],
+            ["l-tek-6lowpan-shield-2_4ghz.arduino.d11", "radio.spi0-mosi"],
+            ["l-tek-6lowpan-shield-2_4ghz.arduino.d12", "radio.spi0-miso"],
+            ["l-tek-6lowpan-shield-2_4ghz.arduino.d13", "radio.spi0-sclk"],
+            ["l-tek-6lowpan-shield-2_4ghz.arduino.d14", "radio.i2c0-sda"],
+            ["l-tek-6lowpan-shield-2_4ghz.arduino.d15", "radio.i2c0-scl"]
+        ]
+    }
+}

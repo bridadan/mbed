@@ -1,0 +1,17 @@
+{
+    "name": "at86rf2x",
+    "type": "peripheral",
+    "properties": {
+        "pins": [
+            "spi0-mosi",
+            "spi0-miso",
+            "spi0-sclk",
+            "spi0-cs",
+            "rst",
+            "slp-tr",
+            "irq",
+            "i2c0-sda",
+            "i2c0-scl"
+        ]
+    }
+}

@@ -1,0 +1,68 @@
+{
+    "name": "nucleo-f429zi",
+    "type": "board",
+    "properties": {
+        "elements": {
+            "target": {
+                "name": "stm32f429zi"
+            },
+            "interface": {
+                "name": "st-link"
+            }
+        },
+        "pins": [
+            {
+                "name": "arduino",
+                "form-factor": "arduino-uno-r3"
+            }
+        ],
+        "netlist": [
+            ["nucleo-f429zi.arduino.a0", "target.PA_3"],
+            ["nucleo-f429zi.arduino.a1", "target.PC_0"],
+            ["nucleo-f429zi.arduino.a2", "target.PC_3"],
+            ["nucleo-f429zi.arduino.a3", "target.PF_3"],
+            ["nucleo-f429zi.arduino.a4", "target.PF_5"],
+            ["nucleo-f429zi.arduino.a5", "target.PF_10"],
+            ["nucleo-f429zi.arduino.d0", "target.PG_9"],
+            ["nucleo-f429zi.arduino.d1", "target.PG_14"],
+            ["nucleo-f429zi.arduino.d2", "target.PF_15"],
+            ["nucleo-f429zi.arduino.d3", "target.PE_13"],
+            ["nucleo-f429zi.arduino.d4", "target.PF_14"],
+            ["nucleo-f429zi.arduino.d5", "target.PE_11"],
+            ["nucleo-f429zi.arduino.d6", "target.PE_9"],
+            ["nucleo-f429zi.arduino.d7", "target.PF_13"],
+            ["nucleo-f429zi.arduino.d8", "target.PF_12"],
+            ["nucleo-f429zi.arduino.d9", "target.PD_15"],
+            ["nucleo-f429zi.arduino.d10", "target.PD_14"],
+            ["nucleo-f429zi.arduino.d11", "target.PA_7"],
+            ["nucleo-f429zi.arduino.d12", "target.PA_6"],
+            ["nucleo-f429zi.arduino.d13", "target.PA_5"],
+            ["nucleo-f429zi.arduino.d14", "target.PB_9"],
+            ["nucleo-f429zi.arduino.d15", "target.PB_8"],
+            ["interface.usbtx", "target.PD_9"],
+            ["interface.usbrx", "target.PD_8"]
+        ],
+        "build": {
+            "config": {
+                "d11_configuration": {
+                    "help": "Value: PA_7 for the default board configuration, PB_5 in case of solder bridge update (SB121 off/ SB122 on)",
+                    "value": "PA_7",
+                    "macro_name": "STM32_D11_SPI_ETHERNET_PIN"
+                },
+                "clock_source": {
+                    "help": "Mask value : USE_PLL_HSE_EXTC | USE_PLL_HSE_XTAL (need HW patch) | USE_PLL_HSI",
+                    "value": "USE_PLL_HSE_EXTC|USE_PLL_HSI",
+                    "macro_name": "CLOCK_SOURCE"
+                },
+                "clock_source_usb": {
+                    "help": "As 48 Mhz clock is configured for USB, SYSCLK has to be reduced from 180 to 168 MHz (set 0 for the max SYSCLK value)",
+                    "value": "1",
+                    "macro_name": "CLOCK_SOURCE_USB"
+                }
+            },
+            "overrides": {
+                "network-default-interface-type": "ETHERNET"
+            }
+        }
+    }
+}

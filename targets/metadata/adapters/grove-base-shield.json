@@ -1,0 +1,92 @@
+{
+    "name": "grove-base-shield",
+    "type": "adapter",
+    "properties": {
+        "pins": [
+            {
+                "name": "arduino",
+                "form-factor": "arduino-uno-r3"
+            },
+            {
+                "name": "grove-i2c",
+                "form-factor": "grove"
+            },
+            {
+                "name": "grove-uart",
+                "form-factor": "grove"
+            },
+            {
+                "name": "grove-d0",
+                "form-factor": "grove"
+            },
+            {
+                "name": "grove-d1",
+                "form-factor": "grove"
+            },
+            {
+                "name": "grove-d2",
+                "form-factor": "grove"
+            },
+            {
+                "name": "grove-d3",
+                "form-factor": "grove"
+            },
+            {
+                "name": "grove-d4",
+                "form-factor": "grove"
+            },
+            {
+                "name": "grove-d5",
+                "form-factor": "grove"
+            },
+            {
+                "name": "grove-d6",
+                "form-factor": "grove"
+            },
+            {
+                "name": "grove-d7",
+                "form-factor": "grove"
+            },
+            {
+                "name": "grove-d8",
+                "form-factor": "grove"
+            },
+            {
+                "name": "grove-a0",
+                "form-factor": "grove"
+            },
+            {
+                "name": "grove-a1",
+                "form-factor": "grove"
+            },
+            {
+                "name": "grove-a2",
+                "form-factor": "grove"
+            },
+            {
+                "name": "grove-a3",
+                "form-factor": "grove"
+            }
+        ],
+        "netlist": [
+            ["arduino.d0", "grove-uart.pin1"],
+            ["arduino.d1", "grove-uart.pin2"],
+            ["arduino.d2", "grove-d2.pin1"],
+            ["arduino.d3", "grove-d3.pin1", "grove-d2.pin2"],
+            ["arduino.d4", "grove-d4.pin1", "grove-d3.pin2"],
+            ["arduino.d5", "grove-d5.pin1", "grove-d4.pin2"],
+            ["arduino.d6", "grove-d6.pin1", "grove-d5.pin2"],
+            ["arduino.d7", "grove-d7.pin1", "grove-d6.pin2"],
+            ["arduino.d8", "grove-d8.pin1", "grove-d7.pin2"],
+            ["arduino.d8", "grove-d8.pin1", "grove-d7.pin2"],
+            ["arduino.d9", "grove-d8.pin2"],
+            ["arduino.d14", "grove-i2c.pin2"],
+            ["arduino.d15", "grove-i2c.pin1"],
+            ["arduino.a0", "grove-a0.pin1"],
+            ["arduino.a1", "grove-a1.pin1", "grove-a0.pin2"],
+            ["arduino.a2", "grove-a2.pin1", "grove-a1.pin2"],
+            ["arduino.a3", "grove-a3.pin1", "grove-a2.pin2"],
+            ["arduino.a4", "grove-a3.pin2"]
+        ]
+    }
+}

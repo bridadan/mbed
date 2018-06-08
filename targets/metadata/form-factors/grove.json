@@ -1,0 +1,10 @@
+{
+    "name": "grove",
+    "type": "form-factor",
+    "properties": {
+        "pins": [
+            "pin1",
+            "pin2"
+        ]
+    }
+}

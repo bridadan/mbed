@@ -622,24 +622,6 @@
         "detect_code": ["1022"],
         "release_versions": ["2", "5"]
     },
-    "K64F": {
-        "supported_form_factors": ["ARDUINO"],
-        "core": "Cortex-M4F",
-        "supported_toolchains": ["ARM", "GCC_ARM", "IAR"],
-        "extra_labels": ["Freescale", "MCUXpresso_MCUS", "KSDK2_MCUS", "FRDM", "KPSDK_MCUS", "KPSDK_CODE", "MCU_K64F", "Freescale_EMAC"],
-        "is_disk_virtual": true,
-        "macros": ["CPU_MK64FN1M0VMD12", "FSL_RTOS_MBED"],
-        "inherits": ["Target"],
-        "detect_code": ["0240"],
-        "device_has": ["ANALOGIN", "ANALOGOUT", "EMAC", "I2C", "I2CSLAVE", "INTERRUPTIN", "LOWPOWERTIMER", "PORTIN", "PORTINOUT", "PORTOUT", "PWMOUT", "RTC", "SERIAL", "SERIAL_FC", "SERIAL_ASYNCH", "SLEEP", "SPI", "SPI_ASYNCH", "SPISLAVE", "STDIO_MESSAGES", "STORAGE", "TRNG", "FLASH"],
-        "features": ["LWIP", "STORAGE"],
-        "release_versions": ["2", "5"],
-        "device_name": "MK64FN1M0xxx12",
-        "bootloader_supported": true,
-        "overrides": {
-            "network-default-interface-type": "ETHERNET"
-        }
-    },
     "EV_COG_AD4050LZ": {
         "inherits": ["Target"],
         "core": "Cortex-M4F",
@@ -1303,7 +1285,7 @@
         "extra_labels_add": ["STM32F4", "STM32F439", "STM32F439ZI", "STM32F439xx", "STM32F439xI", "STM_EMAC"],
         "macros_add": ["MBEDTLS_CONFIG_HW_SUPPORT", "USB_STM_HAL", "USBHOST_OTHER"],
         "device_has_add": ["ANALOGOUT", "CAN", "EMAC", "LOWPOWERTIMER", "SERIAL_FC", "TRNG", "FLASH"],
-        "detect_code": ["0797"],
+
         "features": ["LWIP"],
         "release_versions": ["2", "5"],
         "device_name" : "STM32F439ZI",

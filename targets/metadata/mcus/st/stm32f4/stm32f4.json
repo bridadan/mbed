@@ -1,0 +1,13 @@
+{
+    "name": "stm32f4",
+    "type": "mcu",
+    "properties": {
+        "inherits": "stm32",
+        "build": {
+            "core": "Cortex-M4F",
+            "extra_labels_add": ["STM32F4"],
+            "macros_add": ["USB_STM_HAL", "USBHOST_OTHER"],
+            "device_has_add": ["ANALOGOUT", "CAN", "SERIAL_ASYNCH", "SERIAL_FC", "TRNG", "FLASH"]
+        }
+    }
+}

@@ -1,0 +1,12 @@
+{
+    "name": "sd-card-slot",
+    "type": "form-factor",
+    "properties": {
+        "pins": [
+            "spi-mosi",
+            "spi-miso",
+            "spi-sclk",
+            "spi-cs"
+        ]
+    }
+}

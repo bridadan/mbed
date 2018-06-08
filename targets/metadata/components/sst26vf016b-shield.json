@@ -1,0 +1,23 @@
+{
+    "name": "sst26vf016b-shield",
+    "type": "component",
+    "properties": {
+        "elements": {
+            "flash": {
+                "name": "sst26vf016b"
+            }
+        },
+        "pins": [
+            {
+                "name": "arduino",
+                "form-factor": "arduino-uno-r3"
+            }
+        ],
+        "netlist": [
+            ["sst26vf016b-shield.arduino.d10", "flash.spi-cs"],
+            ["sst26vf016b-shield.arduino.d11", "flash.spi-mosi"],
+            ["sst26vf016b-shield.arduino.d12", "flash.spi-miso"],
+            ["sst26vf016b-shield.arduino.d13", "flash.spi-sclk"]
+        ]
+    }
+}

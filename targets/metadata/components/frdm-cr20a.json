@@ -1,0 +1,25 @@
+{
+    "name": "frdm-cr20a",
+    "type": "component",
+    "properties": {
+        "elements": {
+            "radio": {
+                "name": "mcr20avhm"
+            }
+        },
+        "pins": [
+            {
+                "name": "arduino",
+                "form-factor": "arduino-uno-r3"
+            }
+        ],
+        "netlist": [
+            ["frdm-cr20a.arduino.d5", "radio.rst"],
+            ["frdm-cr20a.arduino.d2", "radio.irq"],
+            ["frdm-cr20a.arduino.d10", "radio.spi0-cs"],
+            ["frdm-cr20a.arduino.d11", "radio.spi0-mosi"],
+            ["frdm-cr20a.arduino.d12", "radio.spi0-miso"],
+            ["frdm-cr20a.arduino.d13", "radio.spi0-sclk"]
+        ]
+    }
+}

@@ -1,0 +1,12 @@
+{
+    "name": "sst26vf016b",
+    "type": "peripheral",
+    "properties": {
+        "pins": [
+            "spi-mosi",
+            "spi-miso",
+            "spi-sclk",
+            "spi-cs"
+        ]
+    }
+}

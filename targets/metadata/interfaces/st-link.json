@@ -1,0 +1,10 @@
+{
+    "name": "st-link",
+    "type": "interface",
+    "properties": {
+        "pins": [
+            "usbtx",
+            "usbrx"
+        ]
+    }
+}

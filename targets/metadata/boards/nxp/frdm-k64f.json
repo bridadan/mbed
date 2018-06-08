@@ -1,0 +1,52 @@
+{
+    "name": "frdm-k64f",
+    "aliases": ["k64f"],
+    "type": "board",
+    "properties": {
+        "elements": {
+            "target": {
+                "name": "mk64fn1m0vll12"
+            },
+            "interface": {
+                "name": "daplink"
+            }
+        },
+        "pins": [
+            {
+                "name": "arduino",
+                "form-factor": "arduino-uno-r3"
+            },
+            {
+                "name": "microsd-card-slot",
+                "form-factor": "sd-card-slot"
+            }
+        ],
+        "netlist": [
+            ["target.PTC16", "frdm-k64f.arduino.d0"],
+            ["target.PTC17", "frdm-k64f.arduino.d1"],
+            ["target.PTB9", "frdm-k64f.arduino.d2"],
+            ["target.PTA2", "frdm-k64f.arduino.d5"],
+            ["target.PTC2", "frdm-k64f.arduino.d7"],
+            ["target.PTC4", "frdm-k64f.arduino.d9"],
+            ["target.PTD0", "frdm-k64f.arduino.d10"],
+            ["target.PTD2", "frdm-k64f.arduino.d11"],
+            ["target.PTD3", "frdm-k64f.arduino.d12"],
+            ["target.PTD1", "frdm-k64f.arduino.d13"],
+            ["target.PTE25", "frdm-k64f.arduino.d14"],
+            ["target.PTE24", "frdm-k64f.arduino.d15"],
+            ["target.PTB17", "interface.usbrx"],
+            ["target.PTB16", "interface.usbtx"],
+            ["target.PTE3", "frdm-k64f.microsd-card-slot.spi-mosi"],
+            ["target.PTE1", "frdm-k64f.microsd-card-slot.spi-miso"],
+            ["target.PTE2", "frdm-k64f.microsd-card-slot.spi-sclk"],
+            ["target.PTE4", "frdm-k64f.microsd-card-slot.spi-cs"]
+        ],
+        "build": {
+          "extra_labels": ["FRDM"],
+          "detect_code": ["0240"],
+          "overrides": {
+              "network-default-interface-type": "ETHERNET"
+          }
+        }
+    }
+}

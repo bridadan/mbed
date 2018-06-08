@@ -1,0 +1,14 @@
+{
+    "name": "mcr20avhm",
+    "type": "peripheral",
+    "properties": {
+        "pins": [
+            "spi0-mosi",
+            "spi0-miso",
+            "spi0-sclk",
+            "spi0-cs",
+            "rst",
+            "irq"
+        ]
+    }
+}
