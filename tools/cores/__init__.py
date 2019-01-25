@@ -106,21 +106,33 @@ class Core(object):
         },
     }
 
-    def __init__(self, core, fp=None, dsp=None, tz=False):
-        self.core = core
-        self.tz = tz
-        self._fp = None if fp is None else FloatingPoint[fp]
-        
+    def __init__(self, core, tz=False, fp=None, dsp=None):
+        self._core = core
+        self._tz = tz
+        self._fp = FloatingPoint[fp] if fp else None
+
         # Certain cores (Cortex-M4) always have the DSP extension present
         # Enable the extension by default if not explicitly set in the constructor
         if dsp is None:
-            self.dsp = _CORE_EXTENSIONS.get(core, {}).get("dsp", False)
+            self._dsp = _CORE_EXTENSIONS.get(core, {}).get("dsp", False)
         else:
-            self.dsp = dsp
+            self._dsp = dsp
+
+    @property
+    def core(self):
+        return self._core
+
+    @property
+    def tz(self):
+        return self._tz
 
     @property
     def fp(self):
-        return None if self._fp is None else self.CORE_FPUS[self.core][self._fp]
+        return self.CORE_FPUS[self._core][self._fp] if self._fp else None
+
+    @property
+    def dsp(self):
+        return self._dsp
 
 def create_cores(data):
     """data can be a string, and dict, or an array of dicts"""
