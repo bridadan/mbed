@@ -1454,7 +1454,12 @@
     "K64F": {
         "supported_form_factors": ["ARDUINO"],
         "components_add": ["SD", "FLASHIAP"],
-        "core": "Cortex-M4F",
+        "core": {
+            "name": "Cortex-M4",
+            "options": {
+                "fpu": "single_precision"
+            }
+        },
         "supported_toolchains": ["ARM", "GCC_ARM", "IAR"],
         "extra_labels": [
             "Freescale",
@@ -1893,7 +1898,12 @@
     },
     "MIMXRT1050_EVK": {
         "supported_form_factors": ["ARDUINO"],
-        "core": "Cortex-M7FD",
+        "core": {
+            "name": "Cortex-M7",
+            "options": {
+                "fpu": "double_precision",
+            }
+        },
         "supported_toolchains": ["ARM", "GCC_ARM", "IAR"],
         "extra_labels": ["NXP", "MCUXpresso_MCUS", "EVK", "MIMXRT1050", "IMX", "NXP_EMAC"],
         "is_disk_virtual": true,
