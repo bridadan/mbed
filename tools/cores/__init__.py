@@ -2,6 +2,7 @@ import six
 from builtins import super
 from enum import Enum
 from abc import ABCMeta, abstractmethod
+from ..config import ConfigException
 
 # For a summary of all the options, Wikipedia has some great tables:
 # https://en.wikipedia.org/wiki/ARM_Cortex-M
@@ -109,7 +110,25 @@ class Core(object):
     def __init__(self, core, tz=False, fp=None, dsp=None):
         self._core = core
         self._tz = tz
-        self._fp = FloatingPoint[fp] if fp else None
+        fp = FloatingPoint[fp] if fp else None
+
+        try:
+            self._fp = self.CORE_FPUS[self._core][self._fp] if self._fp else None
+        except KeyError:
+            supported_fps = [
+                fp.name for fp in self.CORE_FPUS.get(self._core, {}).keys()
+            ]
+
+            err_msg = 'Invalid floating point setting "{}" for core {}". '.format(
+                self._fp, self._core
+            )
+
+            if supported_fps:
+                err_msg += "This core does not support hardware floating point."
+            else:
+                err_msg += "Valid floating point settings are: {}".format(self._fp)
+
+            raise ConfigException(err_msg)
 
         # Certain cores (Cortex-M4) always have the DSP extension present
         # Enable the extension by default if not explicitly set in the constructor
