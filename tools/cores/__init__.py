@@ -153,7 +153,7 @@ class Core(object):
     def dsp(self):
         return self._dsp
 
-def create_cores(data):
+def create_core(data):
     """data can be a string, and dict, or an array of dicts"""
     if isinstance(data, six.string_types):
         data = _CORE_MAP[data]
