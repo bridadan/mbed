@@ -25,10 +25,10 @@ class CoreTest(unittest.TestCase):
     """
 
 
-    def test_create_cores_string(self, *_):
+    def test_create_cores_string(self):
         fake_core_map = {
             "fake_core": {
-                "core": "core_value",
+                "name": "core_value",
                 "arg": "arg_value",
             }
         }
@@ -36,6 +36,26 @@ class CoreTest(unittest.TestCase):
             patch("tools.cores.Core") as patched_Core:
             _ = create_cores("fake_core")
             patched_Core.assert_called_with("core_value", arg="arg_value")
+
+    def test_create_cores_dict(self):
+        with patch("tools.cores.Core") as patched_Core:
+            _ = create_cores({
+                "name": "fake_core",
+                "arg": "arg_value",
+                "arg2": "arg2_value"
+            })
+            patched_Core.assert_called_with(
+                "fake_core", arg="arg_value", arg2="arg2_value"
+            )
+
+    def test_create_cores_invalid(self):
+        type_error = None
+        try:
+            _ = create_cores(1234)
+        except TypeError as e:
+            type_error = e
+
+        assert type_error
 
 
 if __name__ == '__main__':
