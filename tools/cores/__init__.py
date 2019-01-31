@@ -12,72 +12,72 @@ FloatingPoint = Enum("FloatingPoint", "single_precision double_precision")
 
 _CORE_MAP = {
     "Cortex-A9": {
-        "core": "cortex-a9",
+        "name": "cortex-a9",
         "fpu": "double_precision",
     },
     "Cortex-M0": {
-        "core": "cortex-m0",
+        "name": "cortex-m0",
     },
     "Cortex-M0+": {
-        "core": "cortex-m0plus",
+        "name": "cortex-m0plus",
     },
     "Cortex-M1": {
-        "core": "cortex-m1",
+        "name": "cortex-m1",
     },
     "Cortex-M3": {
-        "core": "cortex-m3",
+        "name": "cortex-m3",
     },
     "Cortex-M4": {
-        "core": "cortex-m4",
+        "name": "cortex-m4",
     },
     "Cortex-M4F": {
-        "core": "cortex-m4",
+        "name": "cortex-m4",
         "fpu": "single_precision",
     },
     "Cortex-M7": {
-        "core": "cortex-m7",
+        "name": "cortex-m7",
     },
     "Cortex-M7F": {
-        "core": "cortex-m7",
+        "name": "cortex-m7",
         "fpu": "single_precision",
     },
     "Cortex-M7FD": {
-        "core": "cortex-m7",
+        "name": "cortex-m7",
         "fpu": "double_precision",
     },
     "Cortex-M23-NS": {
-        "core": "cortex-m23",
+        "name": "cortex-m23",
         "tz": True,
     },
     "Cortex-M23": {
-        "core": "cortex-m23",
+        "name": "cortex-m23",
         "tz": True,
     },
     "Cortex-M33-NS": {
-        "core": "cortex-m33",
+        "name": "cortex-m33",
         "tz": True,
     },
     "Cortex-M33": {
-        "core": "cortex-m33",
+        "name": "cortex-m33",
         "tz": True,
     },
     "Cortex-M33F-NS": {
-        "core": "cortex-m33",
+        "name": "cortex-m33",
         "fpu": "single_precision",
         "tz": True,
     },
     "Cortex-M33F": {
-        "core": "cortex-m33",
+        "name": "cortex-m33",
         "fpu": "single_precision",
         "tz": True,
     },
     "Cortex-M33FD-NS": {
-        "core": "cortex-m33",
+        "name": "cortex-m33",
         "fpu": "double_precision",
         "tz": True,
     },
     "Cortex-M33FD": {
-        "core": "cortex-m33",
+        "name": "cortex-m33",
         "fpu": "double_precision",
         "tz": True,
     },
@@ -107,20 +107,20 @@ class Core(object):
         },
     }
 
-    def __init__(self, core, tz=False, fp=None, dsp=None):
-        self._core = core
+    def __init__(self, name, tz=False, fp=None, dsp=None):
+        self._name = name
         self._tz = tz
         fp = FloatingPoint[fp] if fp else None
 
         try:
-            self._fp = self.CORE_FPUS[self._core][self._fp] if self._fp else None
+            self._fp = self.CORE_FPUS[self._name][self._fp] if self._fp else None
         except KeyError:
             supported_fps = [
-                fp.name for fp in self.CORE_FPUS.get(self._core, {}).keys()
+                fp.name for fp in self.CORE_FPUS.get(self._name, {}).keys()
             ]
 
             err_msg = 'Invalid floating point setting "{}" for core {}". '.format(
-                self._fp, self._core
+                self._fp, self._name
             )
 
             if supported_fps:
@@ -133,13 +133,13 @@ class Core(object):
         # Certain cores (Cortex-M4) always have the DSP extension present
         # Enable the extension by default if not explicitly set in the constructor
         if dsp is None:
-            self._dsp = _CORE_EXTENSIONS.get(core, {}).get("dsp", False)
+            self._dsp = _CORE_EXTENSIONS.get(name, {}).get("dsp", False)
         else:
             self._dsp = dsp
 
     @property
-    def core(self):
-        return self._core
+    def name(self):
+        return self._name
 
     @property
     def tz(self):
@@ -147,7 +147,7 @@ class Core(object):
 
     @property
     def fp(self):
-        return self.CORE_FPUS[self._core][self._fp] if self._fp else None
+        return self.CORE_FPUS[self._name][self._fp] if self._fp else None
 
     @property
     def dsp(self):
@@ -161,6 +161,6 @@ def create_cores(data):
     if not isinstance(data, dict):
         raise TypeError("A core must either be a string or a dictionary")
 
-    core = data["core"]
-    del data["core"]
-    return Core(core, **data)
+    name = data["name"]
+    del data["name"]
+    return Core(name, **data)
