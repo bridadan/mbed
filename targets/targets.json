@@ -1901,7 +1901,7 @@
         "core": {
             "name": "Cortex-M7",
             "options": {
-                "fpu": "double_precision",
+                "fpu": "double_precision"
             }
         },
         "supported_toolchains": ["ARM", "GCC_ARM", "IAR"],
