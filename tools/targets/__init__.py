@@ -348,6 +348,16 @@ class Target(namedtuple("Target", "name json_data resolution_order resolution_or
     def is_PSA_non_secure_target(self):
         return 'NSPE_Target' in self.labels
 
+    @property
+    def core(self):
+        core_data = self.__getattr_helper('core')
+        if core_data:
+            # TODO move this to the top and fix import issues
+            from tools.cores import create_core
+            return create_core(core_data)
+        else:
+            return None
+
     def init_hooks(self, hook, toolchain):
         """Initialize the post-build hooks for a toolchain. For now, this
         function only allows "post binary" hooks (hooks that are executed
@@ -632,4 +642,3 @@ def set_targets_json_location(location=None):
     # instead. This ensures compatibility with code that does
     # "from tools.targets import TARGET_NAMES"
     update_target_data()
-

@@ -58,7 +58,7 @@ def temp_target_file(extra_target, json_filename='custom_targets.json'):
 def test_add_extra_targets():
     """Search for extra targets json in a source folder"""
     test_target_json = """
-    { 
+    {
         "Test_Target": {
             "inherits": ["Target"]
         }
@@ -98,7 +98,7 @@ def test_modify_existing_target():
     }"""
 
     test_target_json = """
-    { 
+    {
         "Target": {
             "core": "Cortex-M0",
             "default_toolchain": "GCC_ARM",
@@ -119,7 +119,7 @@ def test_modify_existing_target():
     with temp_target_file(initial_target_json, json_filename="targets.json") as targets_dir:
         Target.set_targets_json_location(os.path.join(targets_dir, "targets.json"))
         update_target_data()
-        assert TARGET_MAP["Test_Target"].core == "Cortex-M4"
+        assert TARGET_MAP["Test_Target"].core.name == "Cortex-M4"
         assert TARGET_MAP["Test_Target"].default_toolchain == 'ARM'
         assert TARGET_MAP["Test_Target"].bootloader_supported == False
 
@@ -127,7 +127,7 @@ def test_modify_existing_target():
             Target.add_extra_targets(source_dir=source_dir)
             update_target_data()
 
-            assert TARGET_MAP["Test_Target"].core == "Cortex-M4"
+            assert TARGET_MAP["Test_Target"].core.name == "Cortex-M4"
             # The existing target should not be modified by custom targets
             assert TARGET_MAP["Test_Target"].default_toolchain != 'GCC_ARM'
             assert TARGET_MAP["Test_Target"].bootloader_supported != True

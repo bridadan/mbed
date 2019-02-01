@@ -1,4 +1,5 @@
 import six
+import copy
 from builtins import super
 from enum import Enum
 from abc import ABCMeta, abstractmethod
@@ -8,132 +9,127 @@ from ..config import ConfigException
 # https://en.wikipedia.org/wiki/ARM_Cortex-M
 
 ArmArchitecture = Enum("ArmArchitecture", "v6m v7a v7m v8m")
-FloatingPoint = Enum("FloatingPoint", "single_precision double_precision")
+FloatingPointUnit = Enum("FloatingPointUnit", "single_precision double_precision")
 
+# TODO move to lower case
 _CORE_MAP = {
     "Cortex-A9": {
-        "name": "cortex-a9",
+        "name": "Cortex-A9",
         "fpu": "double_precision",
     },
     "Cortex-M0": {
-        "name": "cortex-m0",
+        "name": "Cortex-M0",
     },
     "Cortex-M0+": {
-        "name": "cortex-m0plus",
+        "name": "Cortex-M0Plus",
     },
     "Cortex-M1": {
-        "name": "cortex-m1",
+        "name": "Cortex-M1",
     },
     "Cortex-M3": {
-        "name": "cortex-m3",
+        "name": "Cortex-M3",
     },
     "Cortex-M4": {
-        "name": "cortex-m4",
+        "name": "Cortex-M4",
     },
     "Cortex-M4F": {
-        "name": "cortex-m4",
+        "name": "Cortex-M4",
         "fpu": "single_precision",
     },
     "Cortex-M7": {
-        "name": "cortex-m7",
+        "name": "Cortex-M7",
     },
     "Cortex-M7F": {
-        "name": "cortex-m7",
+        "name": "Cortex-M7",
         "fpu": "single_precision",
     },
     "Cortex-M7FD": {
-        "name": "cortex-m7",
+        "name": "Cortex-M7",
         "fpu": "double_precision",
     },
     "Cortex-M23-NS": {
-        "name": "cortex-m23",
+        "name": "Cortex-M23",
         "tz": True,
     },
     "Cortex-M23": {
-        "name": "cortex-m23",
+        "name": "Cortex-M23",
         "tz": True,
     },
     "Cortex-M33-NS": {
-        "name": "cortex-m33",
+        "name": "Cortex-M33",
         "tz": True,
     },
     "Cortex-M33": {
-        "name": "cortex-m33",
+        "name": "Cortex-M33",
         "tz": True,
     },
     "Cortex-M33F-NS": {
-        "name": "cortex-m33",
+        "name": "Cortex-M33",
         "fpu": "single_precision",
         "tz": True,
     },
     "Cortex-M33F": {
-        "name": "cortex-m33",
+        "name": "Cortex-M33",
         "fpu": "single_precision",
         "tz": True,
     },
     "Cortex-M33FD-NS": {
-        "name": "cortex-m33",
+        "name": "Cortex-M33",
         "fpu": "double_precision",
         "tz": True,
     },
     "Cortex-M33FD": {
-        "name": "cortex-m33",
+        "name": "Cortex-M33",
         "fpu": "double_precision",
         "tz": True,
     },
 }
 
-_CORE_EXTENSIONS = {
-    "coretx-m4": {
-        "dsp": True,
-    }
-}
 
 class Core(object):
 
-    CORE_FPUS = {
-        "cortex-m4": {
-            FloatingPoint.single_precision: "fpv4-sp-d16",
+    # TODO move keys to lowercase
+    _CORE_FPUS = {
+        "Cortex-M4": {
+            FloatingPointUnit.single_precision: "fpv4-sp-d16",
         },
-        "cortex-m7": {
-            FloatingPoint.single_precision: "fpv5-sp-d16",
-            FloatingPoint.double_precision: "fpv5-d16",
+        "Cortex-M7": {
+            FloatingPointUnit.single_precision: "fpv5-sp-d16",
+            FloatingPointUnit.double_precision: "fpv5-d16",
         },
-        "cortex-m33": {
-            FloatingPoint.single_precision: "fpv5-sp-d16",
+        "Cortex-M33": {
+            FloatingPointUnit.single_precision: "fpv5-sp-d16",
         },
-        "cortex-a9": {
-            FloatingPoint.double_precision: "vfpv3"
+        "Cortex-A9": {
+            FloatingPointUnit.double_precision: "vfpv3"
         },
     }
 
-    def __init__(self, name, tz=False, fp=None, dsp=None):
+    def __init__(self, name, tz=False, fpu=None, dsp=None):
         self._name = name
         self._tz = tz
-        fp = FloatingPoint[fp] if fp else None
+        self._fpu = fpu
 
-        try:
-            self._fp = self.CORE_FPUS[self._name][self._fp] if self._fp else None
-        except KeyError:
-            supported_fps = [
-                fp.name for fp in self.CORE_FPUS.get(self._name, {}).keys()
+        if not self.is_valid_fpu(self._name, self._fpu):
+            supported_fpus = [
+                f.name for f in self._CORE_FPUS.get(self._name, {}).keys()
             ]
 
-            err_msg = 'Invalid floating point setting "{}" for core {}". '.format(
-                self._fp, self._name
+            err_msg = 'Invalid fpu value "{}" for core {}". '.format(
+                self._fpu, self._name
             )
 
-            if supported_fps:
+            if supported_fpus:
                 err_msg += "This core does not support hardware floating point."
             else:
-                err_msg += "Valid floating point settings are: {}".format(self._fp)
+                err_msg += "Valid fpu values are: {}".format(self._fpu)
 
             raise ConfigException(err_msg)
 
-        # Certain cores (Cortex-M4) always have the DSP extension present
-        # Enable the extension by default if not explicitly set in the constructor
-        if dsp is None:
-            self._dsp = _CORE_EXTENSIONS.get(name, {}).get("dsp", False)
+        # The Cortex-M4 always has the DSP extension present. Enable the extension
+        # by default if not explicitly set to False.
+        if dsp is None and self._name == "Cortex-M4":
+            self._dsp = True
         else:
             self._dsp = dsp
 
@@ -146,21 +142,31 @@ class Core(object):
         return self._tz
 
     @property
-    def fp(self):
-        return self.CORE_FPUS[self._name][self._fp] if self._fp else None
+    def fpu(self):
+        return self._CORE_FPUS[self._name][self._fpu] if self._fpu else None
 
     @property
     def dsp(self):
         return self._dsp
 
+    @classmethod
+    def is_valid_fpu(self, core_name, fpu):
+        return fpu is None or fpu in self._CORE_FPUS.get(core_name, {})
+
 def create_core(data):
     """data can be a string, and dict, or an array of dicts"""
     if isinstance(data, six.string_types):
-        data = _CORE_MAP[data]
-
+        data = copy.copy(_CORE_MAP[data])
     if not isinstance(data, dict):
-        raise TypeError("A core must either be a string or a dictionary")
+        raise TypeError(
+            "The provided type was {}. A core must either be a string or a "
+            "dictionary.".format(type(data))
+        )
 
     name = data["name"]
     del data["name"]
+
+    if "fpu" in data:
+        data["fpu"] = FloatingPointUnit[data["fpu"]] if data["fpu"] else None
+
     return Core(name, **data)
