@@ -9,6 +9,7 @@ from collections import namedtuple
 import shutil
 from subprocess import Popen, PIPE
 import re
+from shutil import copyfile
 
 from tools.resources import FileType
 from tools.targets import TARGET_MAP
@@ -267,11 +268,18 @@ class Uvision(Exporter):
         self.gen_file(
             'uvision/uvision_debug.tmpl', ctx, self.project_name + ".uvoptx"
         )
+        copyfile("uvision/debug_init.ini", join(self.export_dir, "debug_init.ini"))
 
     @staticmethod
     def clean(project_name):
         os.remove(project_name + ".uvprojx")
         os.remove(project_name + ".uvoptx")
+
+        if exists("region_list.json"):
+            os.remove("region_list.json")
+        if exists("debug_init.ini"):
+            os.remove("debug_init.ini")
+
         # legacy .build directory cleaned if exists
         if exists('.build'):
             shutil.rmtree('.build')
