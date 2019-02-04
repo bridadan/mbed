@@ -2,7 +2,7 @@ from __future__ import print_function, absolute_import
 from builtins import str
 
 import os
-from os.path import normpath, exists, dirname
+from os.path import normpath, exists, dirname, join, abspath
 import ntpath
 import copy
 from collections import namedtuple
@@ -268,7 +268,8 @@ class Uvision(Exporter):
         self.gen_file(
             'uvision/uvision_debug.tmpl', ctx, self.project_name + ".uvoptx"
         )
-        copyfile("uvision/debug_init.ini", join(self.export_dir, "debug_init.ini"))
+        debug_init_path = join(dirname(abspath(__file__)), "debug_init.ini")
+        copyfile(debug_init_path, join(self.export_dir, "debug_init.ini"))
 
     @staticmethod
     def clean(project_name):
