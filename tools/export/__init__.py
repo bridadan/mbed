@@ -24,10 +24,11 @@ from os import makedirs, walk
 import copy
 from shutil import rmtree, copyfile
 import zipfile
+import json
 
 from ..resources import Resources, FileType, FileRef
 from ..config import ALLOWED_FEATURES
-from ..build_api import prepare_toolchain
+from ..build_api import prepare_toolchain, merge_region_list
 from ..targets import TARGET_NAMES
 from . import (lpcxpresso, iar, makefile, embitz, coide, kds, simplicity,
                atmelstudio, mcuxpresso, sw4stm32, e2studio, zip, cmsis, uvision,
@@ -275,6 +276,15 @@ def export_project(src_paths, export_path, target, ide, libraries_paths=None,
     # Change linker script if specified
     if linker_script is not None:
         resources.linker_script = linker_script
+
+    # Serialize regions
+    if toolchain.config.has_regions:
+        binary_path = "BUILD/{}.hex".format(name)
+        region_list = list(toolchain.config.regions)
+        region_list = [r._replace(filename=binary_path) if r.active else r
+                       for r in region_list]
+        with open(join(export_path, "region_list.json"), "w") as region_list_file:
+            region_list_file.write(json.dumps(region_list))
 
     files, exporter = generate_project_files(resources, export_path,
                                              target, name, toolchain, ide,
