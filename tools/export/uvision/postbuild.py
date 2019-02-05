@@ -39,15 +39,17 @@ from tools.utils import split_path, run_cmd_ext
 if __name__ == '__main__':
     parser = ArgumentParser()
 
-    parser.add_argument('-k', '--toolchain_path', help='Path to toolchain')
+    parser.add_argument('toolchain_path', help='Path to Keil directory')
 
-    parser.add_argument('-o', '--linker_output', help='Path to the built elf file')
+    parser.add_argument(
+        'linker_output',
+        help='Path to the built axf file (sometimes named .hex)'
+    )
 
     options = parser.parse_args()
-    linker_output_directory, linker_output_name, linker_output_ext = split_path(options.linker_output)
+    output_directory, output_name, output_ext = split_path(options.linker_output)
 
-    hex_file = "BUILD/mbed-cloud-client-example.hex"
-    axf_file = normpath(join(linker_output_directory, linker_output_name + ".axf"))
+    axf_file = normpath(join(output_directory, output_name + ".axf"))
     copyfile(options.linker_output, axf_file)
     command = [
         join(normpath(options.toolchain_path), "ARM/ARMCC/bin/fromelf.exe"),
@@ -56,18 +58,22 @@ if __name__ == '__main__':
     stdout, stderr, retcode = run_cmd_ext(command)
 
     if retcode:
-        raise Exception(
-            "Failed to convert axf to hex.\r\ncommand: {}\r\nstdout: {}\r\nstderr: {}".format(
-                command, stdout, stderr
-            )
-        )
+        err_msg = (
+            "Failed to convert axf to hex.\r\n"
+            "Command: {}\r\n"
+            "retcode: {}\r\n"
+            "stdout: {}\r\n"
+            "stderr: {}"
+        ).format(command, retcode, stdout, stderr)
+        raise Exception(err_msg)
 
     with open(join("region_list.json"), "r") as region_list_file:
         region_list_data = json.load(region_list_file)
+
     region_list = [Region(*r) for r in region_list_data]
     merge_region_list(
         region_list,
-        hex_file,
+        normpath(options.linker_output),
         TerminalNotifier()
     )
 
