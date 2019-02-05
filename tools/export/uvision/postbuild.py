@@ -20,14 +20,13 @@ LIBRARIES BUILD
 from __future__ import print_function, division, absolute_import
 
 import sys
-from os.path import join, abspath, dirname, split, splitext, normpath
+from os.path import join, abspath, dirname, normpath
 import json
 from shutil import copyfile
 from argparse import ArgumentParser
 
-
 # Be sure that the tools directory is in the search path
-ROOT = abspath(join(dirname(__file__), ".."))
+ROOT = abspath(join(dirname(__file__), "../../../"))
 sys.path.insert(0, ROOT)
 
 from tools.build_api import merge_region_list
