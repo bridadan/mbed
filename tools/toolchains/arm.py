@@ -374,9 +374,9 @@ class ARMC6(ARM_STD):
 
     def __init__(self, target, *args, **kwargs):
         mbedToolchain.__init__(self, target, *args, **kwargs)
-        if target.core not in self.SUPPORTED_CORES:
+        if target.core.name not in self.SUPPORTED_CORES:
             raise NotSupportedException(
-                "this compiler does not support the core %s" % target.core)
+                "this compiler does not support the core %s" % target.core.name)
 
         if not set(("ARM", "ARMC6")).intersection(set(target.supported_toolchains)):
             raise NotSupportedException("ARM/ARMC6 compiler support is required for ARMC6 build")
