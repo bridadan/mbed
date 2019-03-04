@@ -1456,9 +1456,7 @@
         "components_add": ["SD", "FLASHIAP"],
         "core": {
             "name": "Cortex-M4",
-            "options": {
-                "fpu": "single_precision"
-            }
+            "fpu": "single_precision"
         },
         "supported_toolchains": ["ARM", "GCC_ARM", "IAR"],
         "extra_labels": [
@@ -1900,9 +1898,7 @@
         "supported_form_factors": ["ARDUINO"],
         "core": {
             "name": "Cortex-M7",
-            "options": {
-                "fpu": "double_precision"
-            }
+            "fpu": "double_precision"
         },
         "supported_toolchains": ["ARM", "GCC_ARM", "IAR"],
         "extra_labels": ["NXP", "MCUXpresso_MCUS", "EVK", "MIMXRT1050", "IMX", "NXP_EMAC"],
@@ -4029,7 +4025,7 @@
         "release_versions": ["2", "5"],
         "device_name": "STM32L476VG",
         "bootloader_supported": true
-    },	
+    },
     "MTS_MDOT_F405RG": {
         "inherits": ["FAMILY_STM32"],
         "core": "Cortex-M4F",
