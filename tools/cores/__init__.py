@@ -156,7 +156,7 @@ class Core(object):
 def create_core(data):
     """data can be a string, and dict, or an array of dicts"""
     if isinstance(data, six.string_types):
-        data = copy.copy(_CORE_MAP[data])
+        data = _CORE_MAP[data]
     if not isinstance(data, dict):
         raise TypeError(
             "The provided type was {}. A core must either be a string or a "
@@ -164,9 +164,9 @@ def create_core(data):
         )
 
     name = data["name"]
-    del data["name"]
+    core_data = { k: v for k, v in data.items() if k != "name" }
 
-    if "fpu" in data:
-        data["fpu"] = FloatingPointUnit[data["fpu"]] if data["fpu"] else None
+    if "fpu" in core_data:
+        core_data["fpu"] = FloatingPointUnit[core_data["fpu"]] if core_data["fpu"] else None
 
-    return Core(name, **data)
+    return Core(name, **core_data)
