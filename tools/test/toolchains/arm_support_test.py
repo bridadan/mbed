@@ -13,7 +13,7 @@ Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
-limitations 
+limitations
 """
 
 import sys
@@ -32,6 +32,8 @@ sys.path.insert(0, ROOT)
 
 from tools.toolchains.arm import ARM_STD, ARM_MICRO, ARMC6
 from tools.utils import NotSupportedException
+from tools.config import ConfigException
+import tools.cores as cores
 
 ARMC5_CORES = ["Cortex-M0", "Cortex-M0+", "Cortex-M3", "Cortex-M4",
                "Cortex-M4F", "Cortex-M7", "Cortex-M7F", "Cortex-M7FD"]
@@ -44,8 +46,14 @@ CORE_SUF_ALPHA = ["MDFNS02347-+"]
        text(alphabet=CORE_SUF_ALPHA))
 def test_arm_std(supported_toolchains, core):
     mock_target = MagicMock()
-    mock_target.core = "Cortex-" + core
     mock_target.supported_toolchains = supported_toolchains
+    core_name = "Cortex-" + core
+    try:
+        mock_target.core = cores.create_core(core_name)
+    except ConfigException as e:
+        assert str(e) == "Invalid core name {}".format(core_name)
+        assert core not in cores.CORES
+
     try:
         ARM_STD(mock_target)
         assert "ARM" in supported_toolchains
@@ -53,13 +61,18 @@ def test_arm_std(supported_toolchains, core):
     except NotSupportedException:
         assert "ARM" not in supported_toolchains or mock_target.core not in ARMC5_CORES
 
-
 @given(lists(sampled_from(["ARM", "uARM", "GCC_ARM", "ARMC6", "IAR", "GARBAGE"])),
        text(alphabet=CORE_SUF_ALPHA))
 def test_arm_micro(supported_toolchains, core):
     mock_target = MagicMock()
-    mock_target.core = "Cortex-" + core
     mock_target.supported_toolchains = supported_toolchains
+    core_name = "Cortex-" + core
+    try:
+        mock_target.core = cores.create_core(core_name)
+    except ConfigException as e:
+        assert str(e) == "Invalid core name {}".format(core_name)
+        assert core not in cores.CORES
+
     try:
         ARM_MICRO(mock_target)
         assert "ARM" in supported_toolchains or "uARM" in supported_toolchains
@@ -73,8 +86,14 @@ def test_arm_micro(supported_toolchains, core):
        text(alphabet=CORE_SUF_ALPHA))
 def test_armc6(supported_toolchains, core):
     mock_target = MagicMock()
-    mock_target.core = "Cortex-" + core
     mock_target.supported_toolchains = supported_toolchains
+    core_name = "Cortex-" + core
+    try:
+        mock_target.core = cores.create_core(core_name)
+    except ConfigException as e:
+        assert str(e) == "Invalid core name {}".format(core_name)
+        assert core not in cores.CORES
+
     try:
         ARMC6(mock_target)
         assert "ARM" in supported_toolchains or "ARMC6" in supported_toolchains
