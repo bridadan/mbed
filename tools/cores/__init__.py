@@ -11,33 +11,20 @@ from ..config import ConfigException
 ArmArchitecture = Enum("ArmArchitecture", "v6m v7a v7m v8m")
 FloatingPointUnit = Enum("FloatingPointUnit", "single_precision double_precision")
 
+CORES = [
+    "Cortex-A9", "Cortex-M0", "Cortex-M0+", "Cortex-M1", "Cortex-M3",
+    "Cortex-M4", "Cortex-M7", "Cortex-M23", "Cortex-M33", "Cortex-M0",
+]
+
 # TODO move to lower case
 _CORE_MAP = {
     "Cortex-A9": {
         "name": "Cortex-A9",
         "fpu": "double_precision",
     },
-    "Cortex-M0": {
-        "name": "Cortex-M0",
-    },
-    "Cortex-M0+": {
-        "name": "Cortex-M0Plus",
-    },
-    "Cortex-M1": {
-        "name": "Cortex-M1",
-    },
-    "Cortex-M3": {
-        "name": "Cortex-M3",
-    },
-    "Cortex-M4": {
-        "name": "Cortex-M4",
-    },
     "Cortex-M4F": {
         "name": "Cortex-M4",
         "fpu": "single_precision",
-    },
-    "Cortex-M7": {
-        "name": "Cortex-M7",
     },
     "Cortex-M7F": {
         "name": "Cortex-M7",
@@ -52,7 +39,6 @@ _CORE_MAP = {
         "tz": True,
     },
     "Cortex-M23": {
-        "name": "Cortex-M23",
         "tz": True,
     },
     "Cortex-M33-NS": {
@@ -60,7 +46,6 @@ _CORE_MAP = {
         "tz": True,
     },
     "Cortex-M33": {
-        "name": "Cortex-M33",
         "tz": True,
     },
     "Cortex-M33F-NS": {
@@ -85,6 +70,15 @@ _CORE_MAP = {
     },
 }
 
+for core in CORES:
+    if core not in _CORE_MAP:
+        _CORE_MAP[core] = {
+            "name": "core",
+        }
+
+for core_name, core_data in _CORE_MAP.items():
+    if "name" not in core_data:
+        core_data["name"] = core_name
 
 class Core(object):
 
@@ -156,7 +150,11 @@ class Core(object):
 def create_core(data):
     """data can be a string, and dict, or an array of dicts"""
     if isinstance(data, six.string_types):
-        data = _CORE_MAP[data]
+        try:
+            data = _CORE_MAP[data]
+        except KeyError:
+            raise ConfigException("Invalid core name {}".format(data))
+
     if not isinstance(data, dict):
         raise TypeError(
             "The provided type was {}. A core must either be a string or a "
