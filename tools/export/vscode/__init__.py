@@ -30,23 +30,6 @@ class VSCode(Makefile):
         """Generate Makefile and VSCode launch and task files
         """
         super(VSCode, self).generate()
-        ctx = {
-            'name': self.project_name,
-            'elf_location': join('BUILD', self.project_name)+'.elf',
-            'c_symbols': self.toolchain.get_symbols(),
-            'asm_symbols': self.toolchain.get_symbols(True),
-            'target': self.target,
-            'include_paths': self.resources.inc_dirs,
-            'load_exe': str(self.LOAD_EXE).lower()
-        }
-
-        if not exists(join(self.export_dir, '.vscode')):
-            makedirs(join(self.export_dir, '.vscode'))
-
-        config_files = ['launch', 'settings', 'tasks']
-        for file in config_files:
-            self.gen_file('vscode/%s.tmpl' % file, ctx,
-                          '.vscode/%s.json' % file)
 
         # So.... I want all .h and .hpp files in self.resources.inc_dirs
         all_directories = []
@@ -93,8 +76,24 @@ class VSCode(Makefile):
             ]
         }
 
-        with open(join(self.export_dir, '.vscode', 'c_cpp_properties.json'), 'w') as outfile:
-            json.dump(cpp_props, outfile, indent=4, separators=(',', ': '))
+        ctx = {
+            'name': self.project_name,
+            'elf_location': join('BUILD', self.project_name)+'.elf',
+            'c_symbols': self.toolchain.get_symbols(),
+            'asm_symbols': self.toolchain.get_symbols(True),
+            'target': self.target,
+            'include_paths': self.resources.inc_dirs,
+            'load_exe': str(self.LOAD_EXE).lower(),
+            'cpp_props': json.dumps(cpp_props, indent=4, separators=(',', ': '))
+        }
+
+        if not exists(join(self.export_dir, '.vscode')):
+            makedirs(join(self.export_dir, '.vscode'))
+
+        config_files = ['launch', 'settings', 'tasks', 'c_cpp_properties']
+        for file in config_files:
+            self.gen_file('vscode/%s.tmpl' % file, ctx,
+                          '.vscode/%s.json' % file)
 
     @staticmethod
     def clean(_):
