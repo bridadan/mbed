@@ -45,11 +45,8 @@ class VSCode(Makefile):
 
         config_files = ['launch', 'settings', 'tasks']
         for file in config_files:
-            if not exists('.vscode/%s.json' % file):
-                self.gen_file('vscode/%s.tmpl' % file, ctx,
-                              '.vscode/%s.json' % file)
-            else:
-                print('Keeping existing %s.json' % file)
+            self.gen_file('vscode/%s.tmpl' % file, ctx,
+                          '.vscode/%s.json' % file)
 
         # So.... I want all .h and .hpp files in self.resources.inc_dirs
         all_directories = []
@@ -116,5 +113,3 @@ class VSCodeArmc5(VSCode, Armc5):
 class VSCodeIAR(VSCode, IAR):
     LOAD_EXE = True
     NAME = "VSCode-IAR"
-
-
