@@ -135,6 +135,8 @@ def get_toolchain_name(target, toolchain_name):
                 return "uARM" #use ARM_MICRO to use AC5+microlib
             else:
                 return "ARMC6" #use AC6+microlib
+        if toolchain_name == "ARMC5":
+            return "ARM"
     else:
         if toolchain_name == "ARM":
             if CORE_ARCH[target.core] == 8:
