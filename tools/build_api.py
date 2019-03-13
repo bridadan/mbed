@@ -121,6 +121,13 @@ def add_result_to_report(report, result):
     report[target][toolchain][id_name].append(result_wrap)
 
 def get_toolchain_name(target, toolchain_name):
+    """Get the internal toolchain name given the toolchain_name provided by
+    the front-end scripts (usually by the -t/--toolchain argument) and the target
+
+    Positional arguments:
+    target - Targe object (not the string name) of the device we are building for
+    toolchain_name - the string that identifies the build tools
+    """
     if int(target.build_tools_metadata["version"]) > 0:
         if toolchain_name == "ARM" or toolchain_name == "ARMC6" :
             if("ARM" in target.supported_toolchains or "ARMC6" in target.supported_toolchains):
