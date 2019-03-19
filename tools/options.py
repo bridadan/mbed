@@ -45,6 +45,7 @@ def get_default_options_parser(add_clean=True, add_options=True,
     targetnames = TARGET_NAMES
     targetnames.sort()
     toolchainlist = list(TOOLCHAINS)
+    toolchainlist.append(u"ARMC5")
     toolchainlist.sort()
 
     parser.add_argument("-m", "--mcu",
@@ -127,7 +128,7 @@ def extract_profile(parser, options, toolchain, fallback="develop"):
         profiles.append(contents)
 
     return profiles
-    
+
 def extract_mcus(parser, options):
     try:
         if options.custom_targets_directory:
