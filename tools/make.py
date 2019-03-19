@@ -337,7 +337,7 @@ if __name__ == '__main__':
                 mcu,
                 toolchain,
                 notify=notify,
-                build_profile=extract_profile(parser, options, toolchain),
+                build_profile=extract_profile(parser, options, toolchain_name),
                 **default_args_dict(options)
             )
         else:
@@ -394,7 +394,7 @@ if __name__ == '__main__':
                     notify=notify,
                     report=build_data_blob,
                     inc_dirs=[dirname(MBED_LIBRARIES)],
-                    build_profile=extract_profile(parser, options, toolchain),
+                    build_profile=extract_profile(parser, options, toolchain_name),
                     **default_args_dict(options)
                 )
             if options.build_data:
